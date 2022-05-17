@@ -1,0 +1,36 @@
+
+ADD CODE BELOW THE DASHED LINE TO THE SphericalAgent3D class
+---------------------------------------------------------
+
+////////////////  BEGIN ADDED FOR VesselModel3D  ///////////////////////
+    public int type;
+
+        public double SumForcesTyped(double interactionRad, OverlapForceResponse3D<A> OverlapFun, int[] types){
+            ArrayList<A> scratchAgentList= G.GetFreshAgentSearchArr();
+            scratchAgentList.clear();
+            double sum=0;
+            G.GetAgentsRadApprox(scratchAgentList,Xpt(),Ypt(),Zpt(),interactionRad);
+            for (A a : scratchAgentList) {
+                boolean cont = false;
+                for (int type : types) {
+                    if (a.type == type) {
+                        cont = true;
+                        break;
+                    }
+                }
+                if(a!=this && cont){
+                    double xComp= DispX(a.Xpt());
+                    double yComp= DispY(a.Ypt());
+                    double zComp= DispZ(a.Zpt());
+                    double dist=Norm(xComp,yComp,zComp);
+                    if(dist<interactionRad) {
+                        xVel-=(xComp/dist)*xVel*(1);
+                        yVel-=(yComp/dist)*yVel*(1);
+                        zVel-=(zComp/dist)*zVel*(1);
+                    }
+                }
+            }
+            return sum;
+        }
+////////////////  END ADDED FOR VesselModel3D  /////////////////////////
+
